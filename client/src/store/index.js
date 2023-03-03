@@ -85,8 +85,8 @@ const oneTankTemp = {
 const store = createStore({
   state: {
     user: {
-      data: {},
-      token: null,
+      data: JSON.parse(sessionStorage.getItem('USER')),
+      token: sessionStorage.getItem('TOKEN'),
     },
     tanks: {
       data: [],
@@ -438,7 +438,7 @@ const store = createStore({
     },
     setUser: (state, userData) => {
       const user = {
-        name: userData.name,
+        fullName: userData.fullName,
         email: userData.email,
         id: userData._id
       }

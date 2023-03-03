@@ -6,6 +6,7 @@
       :name="type"
       :type="type"
       :placeholder="name"
+      :maxlength="max"
       v-model="value"
       required
     />
@@ -19,6 +20,7 @@ let value = ref("");
 defineProps({
   type: String,
   name: String,
+  max: Number
 });
 const emit = defineEmits(["update:modelValue"]);
 

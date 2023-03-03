@@ -106,7 +106,7 @@ function deleteVehicle() {
   background-color: var(--black);
   padding: 5px 20px;
   border-radius: 2px;
-  color: wheat;
+  color: var(--white);
   display: flex;
   align-items: center;
   gap: 5px;

@@ -17,13 +17,13 @@
   <form class="sign-up__form" @submit="register">
     <input type="hidden" name="remember" value="true" />
     <div class="sign-up__credentials-container">
-      <AuthInput v-model="user.name" type="text" name="Full name">
+      <AuthInput v-model="user.fullName" type="text" name="Full name">
         <User
           class="sign-up__credential-item-icon"
-          :class="user.name ? 'sign-up__credential-item-icon--filled' : ''"
+          :class="user.fullName ? 'sign-up__credential-item-icon--filled' : ''"
         />
       </AuthInput>
-      <AuthInput v-model="user.email" type="email" name="Email address">
+      <AuthInput v-model="user.email" type="email" name="Email address" max=255>
         <Mail
           class="sign-up__credential-item-icon"
           :class="user.email ? 'sign-up__credential-item-icon--filled' : ''"
@@ -32,9 +32,9 @@
       <div class="sing-up__credential-item-country credential-item">
         <Country
         class="sign-up__credential-item-icon"
-        :class="user.country ? 'sign-up__credential-item-icon--filled' : ''"
+        :class="user.countryOrigin ? 'sign-up__credential-item-icon--filled' : ''"
         />
-        <select required v-model="user.country" name="Country origin" class="sing-up__credential-item-country--list" :style="user.country ? 'color: #000000' : 'color: #808080'">
+        <select required v-model="user.countryOrigin" name="Country origin" class="sing-up__credential-item-country--list" :style="user.country ? 'color: #000000' : 'color: #808080'">
           <option value="">Country origin</option>
           <option  v-for="country in countryList" :value="country">{{ country }}</option>
         </select>
@@ -75,7 +75,7 @@
           name="atomic-state"
           type="checkbox"
           class="sign-up__atomic-state--checkbox"
-          v-model="user.remember"
+          v-model="user.atomicButton"
         />
         <label class="sign-up__atomic-state--text" fup="atomic-state">Own an atomic button</label>
       </div>
@@ -109,11 +109,12 @@ import Country from "../components/icons/Country.vue";
 const router = useRouter();
 
 const user = reactive({
-  name: "",
+  fullName: "",
   email: "",
-  country: "",
+  countryOrigin: "",
   password: "",
   passwordConfirmation: "",
+  atomicButton: false,
 });
 
 const countryList = computed(() => store.state.countryList);
@@ -190,6 +191,7 @@ function register(event) {
   font-size: 14px;
   color: #808080;
   height: fit-content;
+  width: 100%;
 }
 option:not(:first-of-type) {
   color: black;

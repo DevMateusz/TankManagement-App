@@ -8,8 +8,8 @@
         <img class="nav__logo" src="../assets/LogoLight.png" alt="light tank logo">
         <div class="nav__user">
           <div class="nav__user--information">
-            <h2 class="user--name">Andrzej duda</h2>
-            <h5 class="user--email">asdmkasnfvi@sdd.pl</h5>
+            <h2 class="user--name">{{ user.fullName }}</h2>
+            <h5 class="user--email">{{ user.email }}</h5>
           </div>
           <button @click="logout" class="nav__user--logout">
             <Logout />
@@ -25,11 +25,15 @@
 <script setup>
 import Logout from './icons/Logout.vue'
 import { useRoute } from 'vue-router';
+import { computed } from 'vue';
+import { useStore } from "vuex";
+const store = useStore();
 const route = useRoute();
 
+const user = computed(() => store.state.user.data);
 
 function logout() {
-  alert('logout!!!')
+  store.commit('logout')
 }
 
 </script>
