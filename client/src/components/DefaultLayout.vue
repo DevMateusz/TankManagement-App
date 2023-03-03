@@ -17,12 +17,8 @@
         </div>
       </div>
     </nav>
-    <header class="header">
-      <div class="header__container">
-        <h1 class="header--title">Tanks</h1>
-        <slot name="header">asdas</slot>
-      </div>
-    </header>
+    
+    <router-view></router-view>
   </div>
 </template>
 
@@ -31,6 +27,7 @@ import Logout from './icons/Logout.vue'
 import { useRoute } from 'vue-router';
 const route = useRoute();
 
+
 function logout() {
   alert('logout!!!')
 }
@@ -38,24 +35,7 @@ function logout() {
 </script>
 
 <style scoped>
-.header{
-  background-color: var(--white);
-  box-shadow: var(--black) 0px 0px 10px;
-  height: 60px;
-}
-.header__container{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-  padding: 0px 10px;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1280px;
-}
-.header--title{
-  font-weight: 600;
-}
+
 
 .screen{
   height: 100vh;
@@ -82,7 +62,9 @@ function logout() {
 }
 
 .nav__logo{
+  margin-left: 8%;
   height: 100%;
+  display: none;
 }
 .nav__user{
   display: flex;
@@ -99,6 +81,12 @@ function logout() {
   flex: 1;
   justify-content: space-between;
   color: var(--white);
+}
+
+@media (min-width: 768px) {
+  .nav__logo{
+    display: inherit;
+  }
 }
 
 </style>

@@ -67,15 +67,34 @@ const tempData = {
   ]
 }
 
+const oneTankTemp = {
+  data: {
+      _id: "asd12312314",
+      flankNumber: "US0014",
+      poducent: "General Dynamics",
+      model: "Abrams",
+      actualModification: "SEP v1",
+      vintage: "2012",
+      entryDate: "2021-07-28",
+      mileage: 12000,
+      ammunition: 60,
+      armorThickness: [300,200,150],
+  }
+}
+
 const store = createStore({
   state: {
     user: {
       data: {},
-      token: "ss",
+      token: null,
     },
     tanks: {
       data: [],
       loading: false
+    },
+    currentTank: {
+      data: {},
+      loading: false,
     },
     countryList: [
       "Afghanistan",
@@ -341,12 +360,93 @@ const store = createStore({
       //   return res;
       // })
       commit("setTanks", tempData)
-    }
+    },
+    getTank({ commit }) {
+      // commit("setCurrentTankLoading", true)
+      // return axiosClient.get("/api/tank").then((res) => {
+      //   commit("setCurrentTankLoading", false)
+      //   commit("setCurrentTank", res.data)
+      //   return res;
+      // })
+      commit("setCurrentTank", oneTankTemp)
+      return oneTankTemp
+    },
+    updateTank({ commit }, tank) {
+      // return axiosClient.put(`/api/tank/${tank._id}`, tank).then((res) => {
+      //   commit("updateTanks", res.data);
+      //   return res;
+      // })
+    },
+    createTank({ commit }, tank) {
+      // return axiosClient.post(`/api/tank`, tank).then((res) => {
+      //   commit("saveTank", res.data);
+      //   return res;
+      // })
+    },
+    deleteTank({ commit }, id) {
+      return axiosClient.delete(`/api/surveys/${id}`).then((res) => {
+        commit("deleteTank", res.data)
+      });
+    },
+    register({ commit }, user) {
+      return axiosClient.post('/api/register', user).then(({data}) => {
+        commit('setUser', data);
+        return data;
+      })
+    },
+    login({ commit }, user) {
+      return axiosClient.post('/api/login', user).then(({data}) => {
+        commit('setUser', data);
+        return data;
+      })
+    },
   },
   mutations: {
     setTanks: (state, tanks) => {
       state.tanks.data = tanks.data
-    }
+    },
+    setCurrentTank: (state, currentTank) => {
+      state.currentTank.data = currentTank.data
+    },
+    setTanksLodaing: (state, loading) => {
+      state.tanks.loading = loading
+    },
+    setCurrentTankLodaing: (state, loading) => {
+      state.currentTank.loading = loading
+    },
+    updateTanks: (state, tank) => {
+      state.tanks.data = state.tanks.data.map((t) => {
+        if(t._id == tank._id) {
+          return tank;
+        }
+        return t;
+      });
+    },
+    saveTank: (state, tank) => {
+      state.tanks.data = [...state.tanks.data, tank];
+    },
+    deleteTank: (state, id) => {
+      state.tanks.data = state.tanks.data.filter((t) => t._id != id)
+    },
+    logout: (state) => {
+      state.user.data = {};
+      state.user.token = null;
+      sessionStorage.removeItem('TOKEN');
+      router.push({
+        name: "Login",
+      });
+    },
+    setUser: (state, userData) => {
+      const user = {
+        name: userData.name,
+        email: userData.email,
+        id: userData._id
+      }
+      state.user.token = userData.token;
+      state.user.data = user;
+      sessionStorage.setItem('TOKEN', userData.token);
+      sessionStorage.setItem('USER', JSON.stringify(user));
+    },
   },
   modules: {},
 })

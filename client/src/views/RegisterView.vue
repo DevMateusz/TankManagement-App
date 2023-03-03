@@ -166,7 +166,7 @@ function register(event) {
       error.value = "Passwords are not the same";
     }
   } else {
-    error.value = "Password is too weak";
+    error.value = "Password is too weak min. 6 letters, including 1 number and 1 special character";
   }
 }
 </script>
