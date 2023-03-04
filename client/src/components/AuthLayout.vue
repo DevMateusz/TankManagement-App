@@ -1,7 +1,7 @@
 <template>
   <div class="screen">
     <div class="main" style="animation: fade-in-out 0.5s ease-in-out both">
-      <img src="/src/assets/logo.png" alt="Logo Post It" class="auth-link__logo" />
+      <img src="../assets/Logo.png" alt="Logo black and white tank" class="auth-link__logo" />
       <router-view></router-view>
     </div>
   </div>
