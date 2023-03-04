@@ -1,7 +1,8 @@
 <template>
  <router-view></router-view>
+ <Notify/>
 </template>
 
 <script setup>
-import { RouterView } from 'vue-router'
+  import Notify from './components/Notify.vue';
 </script>

@@ -44,6 +44,9 @@ min-height: 100vh;
   margin-right: auto;
   max-width: 1280px;
 }
+.main__container{
+  flex-direction: column;
+}
 .header--title{
   font-weight: 600;
 }

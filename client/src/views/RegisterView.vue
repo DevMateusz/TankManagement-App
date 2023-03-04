@@ -34,7 +34,7 @@
         class="sign-up__credential-item-icon"
         :class="user.countryOrigin ? 'sign-up__credential-item-icon--filled' : ''"
         />
-        <select required v-model="user.countryOrigin" name="Country origin" class="sing-up__credential-item-country--list" :style="user.country ? 'color: #000000' : 'color: #808080'">
+        <select required v-model="user.countryOrigin" name="Country origin" class="sing-up__credential-item-country--list" :style="user.countryOrigin ? 'color: #000000' : 'color: #808080'">
           <option value="">Country origin</option>
           <option  v-for="country in countryList" :value="country">{{ country }}</option>
         </select>

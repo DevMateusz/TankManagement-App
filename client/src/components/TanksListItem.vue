@@ -3,7 +3,7 @@
     <div class="header">
       <h1 class="header__flank-number">{{ tank.flankNumber }}</h1>
       <h6 class="header__primary-information">
-        <p class="primary-information primary-information--producent">{{ tank.poducent }} -</p>
+        <p class="primary-information primary-information--producent">{{ tank.producent }} -</p>
         <p class="primary-information primary-information--model">&nbsp;{{ tank.model }}&nbsp;</p>
         <p class="primary-information primary-information--year">{{ tank.vintage }}</p>
       </h6>
@@ -12,7 +12,7 @@
       <h3 class="specification__title">Specification:</h3>
       <h5 class="specification__element">
         <p class="element--name">Producent -</p>
-        <p class="element--value">&nbsp;{{ tank.poducent }}</p>
+        <p class="element--value">&nbsp;{{ tank.producent }}</p>
       </h5>
       <h5 class="specification__element">
         <p class="element--name">Model -</p>
@@ -57,12 +57,19 @@
 <script setup>
 import Delete from './icons/Delete.vue'
 import Edit from './icons/Edit.vue'
+import store from "../store";
 const props = defineProps({
   tank: Object,
 });
 
 function deleteVehicle() {
-  alert(`delete ${props.tank._id}`)
+  store
+    .dispatch("deleteTank", props.tank._id).then(() => {
+      store.commit("notify", {
+          type: "success",
+          message: "Tank has been successfully removed",
+        });
+    });
 }
 </script>
 

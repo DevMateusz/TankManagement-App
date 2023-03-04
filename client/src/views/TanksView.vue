@@ -4,7 +4,8 @@
       <router-link :to="{name: 'Tank'}" class="add-button">Add vehicle <Plus/></router-link>
     </template>
     <template v-slot:default>
-      <div class="tank-list">
+      <Loading v-if="loading"/>
+      <div v-else class="tank-list">
         <TanksListItem v-for="tank in tanks" :tank="tank"/>
       </div>
     </template>
@@ -17,6 +18,7 @@ import { computed } from 'vue';
 import PageComponent from '../components/PageComponent.vue';
 import TanksListItem from '../components/TanksListItem.vue';
 import Plus from '../components/icons/Plus.vue'
+import Loading from '../components/Loading.vue'
 
 const tanks = computed(() => store.state.tanks.data);
 const loading = computed(() => store.state.tanks.loading);

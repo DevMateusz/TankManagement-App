@@ -34,6 +34,10 @@ const user = computed(() => store.state.user.data);
 
 function logout() {
   store.commit('logout')
+  store.commit("notify", {
+    type: "success",
+    message: "You have been correctly logged out",
+  });
 }
 
 </script>

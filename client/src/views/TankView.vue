@@ -2,20 +2,21 @@
   <PageComponent :title="route.params.id ? model.flankNumber : 'Create a vehicle'">
     <template v-slot:header>
       <div class="actions-container">
-        <button v-if="route.params.id" class="delete-button">Delete</button>
+        <button v-if="route.params.id" @click="deleteVehicle" class="delete-button">Delete</button>
         <button type="submit" form="tank" class="save-button">{{ route.params.id ? 'Update' : '&nbsp;Save&nbsp;' }}</button>
       </div>
     </template>
     <template v-slot:default>
-      <div class="data-container">
+      <Loading v-if="loading"/>
+      <div v-else class="data-container">
         <form id="tank" class="data-form" @submit.prevent="saveVehicle">
           <div class="data-element">
             <label class="data-lable" for="flank-number">Flank number</label>
             <input required class="data-value" v-model="model.flankNumber" name="flank-number" id="flank-number" type="text">
           </div>
           <div class="data-element">
-            <label class="data-lable" for="poducent">Poducent</label>
-            <input required class="data-value" v-model="model.poducent" name="poducent" id="poducent" type="text">
+            <label class="data-lable" for="producent">Producent</label>
+            <input required class="data-value" v-model="model.producent" name="producent" id="producent" type="text">
           </div>
           <div class="data-element">
             <label class="data-lable" for="model">Model</label>
@@ -58,19 +59,22 @@
 
 <script setup>
 import PageComponent from '../components/PageComponent.vue';
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import store from "../store";
 import { useRoute, useRouter } from "vue-router";
+import Loading from '../components/Loading.vue'
+
+const loading = computed(() => store.state.currentTank.loading)
 
 const router = useRouter();
 const route = useRoute();
 
 const model = ref({
   flankNumber: "",
-  poducent: "",
+  producent: "",
   model: "",
   actualModification: "",
-  vintage: 0,
+  vintage: 1900,
   entryDate: null,
   mileage: 0,
   ammunition: 0,
@@ -82,18 +86,46 @@ if (route.params.id) {
     model.value = {...JSON.parse(JSON.stringify(tank.data))}
   })
 }
-function valitadeValues() {
-
-}
 
 function deleteVehicle() {
-  
+  store
+    .dispatch("deleteTank", model.value._id)
+    .then((tank) => {
+      store.commit("notify", {
+          type: "success",
+          message: "Tank has been successfully removed",
+        });
+      router.push({
+        name: "Tanks",
+      });
+    })
 }
+
+
 function saveVehicle() {
+  console.log(model.value);
   if(route.params.id){
-    //update
+    store
+    .dispatch("updateTank", model.value).then(() => {
+      store.commit("notify", {
+          type: "success",
+          message: "Tank has been successfully updated",
+        });
+    })
   } else {
-    //create
+    store
+    .dispatch("createTank", model.value)
+    .then((tank) => {
+      store.commit("notify", {
+          type: "success",
+          message: "Tank has been successfully created",
+        });
+      router.push({
+        name: "Tank",
+        params: { id: tank.data._id },
+      });
+      model.value = tank.data;
+    })
   }
 }
 
@@ -126,6 +158,11 @@ function saveVehicle() {
 }
 .data-value--armor, .data-lable--armor{
   margin-left: 15px;
+}
+.data-value--armor{
+  border: var(--weak-gray) 1px solid;
+  border-radius: 2px;
+  padding: 5px;
 }
 .data-lable--armor{
   font-weight: 500;

@@ -2,86 +2,6 @@ import { createStore } from 'vuex';
 import axiosClient from '../axios';
 import router  from '../router';
 
-const tempData = {
-  data: [
-    {
-      _id: "asd1231231",
-      flankNumber: "US001",
-      poducent: "General Dynamics",
-      model: "Abrams",
-      actualModification: "SEP v3",
-      vintage: "2012",
-      entryDate: "2021-07-28",
-      mileage: 12000,
-      ammunition: 60,
-      armorThickness: [300,200,150],
-    },
-    {
-      _id: "asd1231232",
-      flankNumber: "US00211",
-      poducent: "General Dynamics",
-      model: "Abrams",
-      actualModification: "SEP v2",
-      vintage: "2012",
-      entryDate: "2021-07-28",
-      mileage: 12000,
-      ammunition: 60,
-      armorThickness: [300,200,150],
-    },
-    {
-      _id: "asd12312312",
-      flankNumber: "US0012",
-      poducent: "General Dynamics",
-      model: "Abrams",
-      actualModification: "SEP v3",
-      vintage: "2012",
-      entryDate: "2021-07-28",
-      mileage: 12000,
-      ammunition: 60,
-      armorThickness: [300,200,150],
-    },
-    {
-      _id: "asd12312313",
-      flankNumber: "US0013",
-      poducent: "General Dynamics",
-      model: "Abrams",
-      actualModification: "SEP v3",
-      vintage: "2012",
-      entryDate: "2021-07-28",
-      mileage: 12000,
-      ammunition: 60,
-      armorThickness: [300,200,150],
-    },
-    {
-      _id: "asd12312314",
-      flankNumber: "US0014",
-      poducent: "General Dynamics",
-      model: "Abrams",
-      actualModification: "SEP v1",
-      vintage: "2012",
-      entryDate: "2021-07-28",
-      mileage: 12000,
-      ammunition: 60,
-      armorThickness: [300,200,150],
-    },
-  ]
-}
-
-const oneTankTemp = {
-  data: {
-      _id: "asd12312314",
-      flankNumber: "US0014",
-      poducent: "General Dynamics",
-      model: "Abrams",
-      actualModification: "SEP v1",
-      vintage: "2012",
-      entryDate: "2021-07-28",
-      mileage: 12000,
-      ammunition: 60,
-      armorThickness: [300,200,150],
-  }
-}
-
 const store = createStore({
   state: {
     user: {
@@ -346,45 +266,46 @@ const store = createStore({
       "Zambia",
       "Zimbabwe",
       "Åland Islands"
-    ]
+    ],
+    notifications: {
+      data: [],
+      index: 0
+    },
   },
   getters: {
     
   },
   actions: {
     getTanks({ commit }) {
-      // commit("setTanksLoading", true)
-      // return axiosClient.get("/api/tanks").then((res) => {
-      //   commit("setTanksLoading", false)
-      //   commit("setTanks", res.data)
-      //   return res;
-      // })
-      commit("setTanks", tempData)
+      commit("setTanksLoading", true)
+      return axiosClient.get("/api/tanks").then((res) => {
+        commit("setTanksLoading", false)
+        commit("setTanks", res.data)
+        return res;
+      })
     },
-    getTank({ commit }) {
-      // commit("setCurrentTankLoading", true)
-      // return axiosClient.get("/api/tank").then((res) => {
-      //   commit("setCurrentTankLoading", false)
-      //   commit("setCurrentTank", res.data)
-      //   return res;
-      // })
-      commit("setCurrentTank", oneTankTemp)
-      return oneTankTemp
+    getTank({ commit }, id) {
+      commit("setCurrentTankLoading", true)
+      return axiosClient.get(`/api/tank/${id}`).then((res) => {
+        commit("setCurrentTankLoading", false)
+        commit("setCurrentTank", res.data)
+        return res;
+      })
     },
     updateTank({ commit }, tank) {
-      // return axiosClient.put(`/api/tank/${tank._id}`, tank).then((res) => {
-      //   commit("updateTanks", res.data);
-      //   return res;
-      // })
+      return axiosClient.put(`/api/tank/${tank._id}`, tank).then((res) => {
+        commit("updateTanks", res.data);
+        return res;
+      })
     },
     createTank({ commit }, tank) {
-      // return axiosClient.post(`/api/tank`, tank).then((res) => {
-      //   commit("saveTank", res.data);
-      //   return res;
-      // })
+      return axiosClient.post(`/api/tank`, tank).then((res) => {
+        commit("saveTank", res.data);
+        return res;
+      })
     },
     deleteTank({ commit }, id) {
-      return axiosClient.delete(`/api/surveys/${id}`).then((res) => {
+      return axiosClient.delete(`/api/tank/${id}`).then((res) => {
         commit("deleteTank", res.data)
       });
     },
@@ -403,13 +324,17 @@ const store = createStore({
   },
   mutations: {
     setTanks: (state, tanks) => {
-      state.tanks.data = tanks.data
+      console.log(tanks);
+      state.tanks.data = tanks
     },
     setCurrentTank: (state, currentTank) => {
       state.currentTank.data = currentTank.data
     },
-    setTanksLodaing: (state, loading) => {
+    setTanksLoading: (state, loading) => {
       state.tanks.loading = loading
+    },
+    setCurrentTankLoading: (state, loading) => {
+      state.currentTank.loading = loading
     },
     setCurrentTankLodaing: (state, loading) => {
       state.currentTank.loading = loading
@@ -447,6 +372,14 @@ const store = createStore({
       sessionStorage.setItem('TOKEN', userData.token);
       sessionStorage.setItem('USER', JSON.stringify(user));
     },
+    notify: (state, {message, type}) => {
+      const notificationId = state.notifications.index
+      state.notifications.index += 1
+      state.notifications.data.unshift({message, type, show: true, id: notificationId})
+      setTimeout(() => {
+        state.notifications.data = state.notifications.data.filter(notification => notification.id != notificationId)
+      }, 3000);
+    }
   },
   modules: {},
 })

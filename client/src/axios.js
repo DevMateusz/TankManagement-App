@@ -14,11 +14,11 @@ axiosClient.interceptors.response.use(function (response) {
 }, function (error) {
   switch (error.response.status) {
     case 401:
-      // store.commit('logout')
-      // store.commit("notify", {
-      //   type: "information",
-      //   message: "Session expired log in again",
-      // });
+      store.commit('logout')
+      store.commit("notify", {
+        type: "information",
+        message: "Session expired log in again",
+      });
       break;
   
     default:
