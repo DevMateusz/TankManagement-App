@@ -324,7 +324,6 @@ const store = createStore({
   },
   mutations: {
     setTanks: (state, tanks) => {
-      console.log(tanks);
       state.tanks.data = tanks
     },
     setCurrentTank: (state, currentTank) => {
