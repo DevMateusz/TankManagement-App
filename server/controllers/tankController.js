@@ -22,13 +22,9 @@ const createTank = async(req, res) => {
 const getTank = async(req, res) => {
   const userId = req.user.id;
   const id = req.params.id;
-  const tank = req.body;
-  console.log(userId, id);
   try {
     const user = await User.findOne({ _id: userId }).populate('tanks');
-    console.log(user);
     const tank = user.tanks.find(t => t._id.toString() === id);
-    console.log(tank);
     if (!tank) {
       return res.status(404).json({ message: 'Tank not found' });
     }
@@ -43,7 +39,6 @@ const updateTank = async (req, res) => {
   const userId = req.user.id;
   const id = req.params.id;
   const tank = req.body;
-  console.log(userId, id);
   try {
     const updatedTank = await Tank.findOneAndUpdate(
       { _id: id, user: userId },

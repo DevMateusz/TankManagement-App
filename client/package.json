@@ -6,10 +6,7 @@
     "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
-    "test:e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",
-    "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'",
-    "test:unit": "cypress run --component",
-    "test:unit:dev": "cypress open --component"
+    "e2e": "cypress run --browser chrome"
   },
   "dependencies": {
     "axios": "^1.3.4",
@@ -19,9 +16,9 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
+    "chance": "^1.1.11",
     "cypress": "^12.7.0",
     "start-server-and-test": "^2.0.0",
     "vite": "^4.1.4"
   }
 }
-

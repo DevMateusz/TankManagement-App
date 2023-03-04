@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const createNewUser = async (req, res) => {
   try{
     const {fullName, email, password, passwordConfirmation, countryOrigin, atomicButton} = req.body;
-    console.log(req.body);
     const lowerCaseEmail = email.toLowerCase(); 
     if(!(fullName && lowerCaseEmail && password && passwordConfirmation && countryOrigin && atomicButton != null)) {
       return res.status(400).json({"message": "All input is required"});
@@ -20,8 +19,8 @@ const createNewUser = async (req, res) => {
       return res.status(422).json({"message": "Passwords are not the same"});
     }
 
-    if(validatePassword(password)>2) {
-      return res.status(422).json({"message": "Password is too weak"});
+    if(validatePassword(password)<3) {
+      return res.status(422).json({"message": "Password is too weak min. 6 letters, including 1 number and 1 special character"});
     }
 
     encryptedPassword = bcrypt.hashSync(password, 10);

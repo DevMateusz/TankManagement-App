@@ -23,3 +23,12 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+
+Cypress.Commands.add('login', (email, pass) => {
+  cy.visit('http://192.168.1.150:5173/login');
+  cy.contains("Sign in to president's account")
+  cy.get(':nth-child(1) > .credential-item__input').type(email)
+  cy.get(':nth-child(2) > .credential-item__input').type(pass)
+  cy.get('.sign-in__action-button').click();
+})

@@ -23,7 +23,7 @@
           :class="user.fullName ? 'sign-up__credential-item-icon--filled' : ''"
         />
       </AuthInput>
-      <AuthInput v-model="user.email" type="email" name="Email address" max=255>
+      <AuthInput v-model="user.email" type="email" name="Email address" :max=255>
         <Mail
           class="sign-up__credential-item-icon"
           :class="user.email ? 'sign-up__credential-item-icon--filled' : ''"
